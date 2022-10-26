@@ -3,12 +3,27 @@ import Head from "next/head"
 import styles from "../styles/Home.module.css"
 import AddListForm from "../components/AddListForm"
 import Lists from "../components/Lists"
+import connectMongo from "../lib/connectMongo"
+import List from "../models/list"
 
-export default function HomePage() {
-  const [lists, setLists] = useState([])
+// THIS INDEX FILE SHOWS THE LISTS
+
+export default function HomePage({ listsName }) {
+  const [list, setList] = useState(listsName)
 
   const addNewList = (newList) => {
-    setLists([...lists, newList])
+    setList([...list, newList])
+  }
+
+  const deleteList = (id) => {
+    fetch(DELETEurl, {
+      method: "Delete",
+      headers: {
+        Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`,
+      },
+    })
+    const removedItem = todoList.filter((todo) => todo.id !== id)
+    setList([...list, listsName])
   }
 
   return (
@@ -20,7 +35,29 @@ export default function HomePage() {
       </Head>
       <h1>Next.js project</h1>
       <AddListForm addNewList={addNewList} />
-      <Lists lists={lists} />
+      <Lists list={list} delteList={deleteList} />
     </div>
   )
+}
+
+//Get list names from mongo using ServerSide props which would render the first time
+export async function getServerSideProps() {
+  await connectMongo() // ---> connects to mongo
+  try {
+    const listSchemaResult = await List.find({}) // ---> grabs the schema with the and uses mongoose get(find) method (CRUD)
+    const listsName = listSchemaResult.map((doc) => {
+      //converts the mongoose document to js object
+      const list = doc.toObject()
+      list._id = list._id.toString()
+      return list
+    })
+    return {
+      props: { listsName: listsName },
+    }
+  } catch (error) {
+    console.log(error)
+    return {
+      notFound: true,
+    }
+  }
 }
