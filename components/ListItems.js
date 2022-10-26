@@ -3,7 +3,6 @@ import Item from "./Item"
 import { List } from "@mui/material"
 
 const ListItems = ({ listItems }) => {
-  console.log(listItems)
   return (
     <List
       sx={{
@@ -14,7 +13,7 @@ const ListItems = ({ listItems }) => {
       }}
     >
       {listItems.map((item) => {
-        return <Item key={item.id} item={item} />
+        return <Item key={item._id} item={item} />
       })}
     </List>
   )
