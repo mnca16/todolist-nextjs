@@ -5,8 +5,6 @@ import {
   ListItemIcon,
   ListItemText,
   IconButton,
-  Stack,
-  Box,
 } from "@mui/material"
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation"
 
