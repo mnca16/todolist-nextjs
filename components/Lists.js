@@ -1,12 +1,21 @@
 import React, { useState } from "react"
-import { CardActionArea, Box } from "@mui/material"
+import Link from "next/Link"
+import {
+  CardActionArea,
+  Box,
+  CardContent,
+  CardActions,
+  Button,
+} from "@mui/material"
 
-const Lists = ({ lists }) => {
+//LIST NAMES MAIN PAGE
+const Lists = ({ list }) => {
+  console.log(list)
   return (
-    <ul>
-      {lists.map((list) => {
+    <ul style={{ listStyle: "none" }}>
+      {list.map((list) => {
         return (
-          <li key={list.id}>
+          <li key={list._id}>
             <Box
               sx={{
                 backgroundColor: "#E6E6FA",
@@ -17,9 +26,16 @@ const Lists = ({ lists }) => {
                 width: "20%",
               }}
             >
-              <CardActionArea>
-                <h1 style={{ margin: "50px" }}>{list.title}</h1>
-              </CardActionArea>
+              <CardContent>
+                <CardActions>
+                  <Button size="small">Delete List</Button>
+                </CardActions>
+                <CardActionArea>
+                  <h1 style={{ margin: "50px" }}>
+                    <Link href={`/todolist/${list._id}`}>{list.name}</Link>
+                  </h1>
+                </CardActionArea>
+              </CardContent>
             </Box>
           </li>
         )
