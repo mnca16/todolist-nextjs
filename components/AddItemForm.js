@@ -1,22 +1,51 @@
 import { Button, Stack, TextField } from "@mui/material"
 import React, { useState } from "react"
+import { useRouter } from "next/router"
+import { ObjectId } from "bson"
+
+//LIST ITEMS FORM
 
 const AddItemForm = ({ addItem }) => {
+  //gets the id from useRouter method
+  //and send on post request
+  const router = useRouter()
+  const { pid } = router.query
+  console.log("listId", pid)
+
   //controls input field
-  const [itemTitle, setItemTitle] = useState("")
+  const [itemTitle, setItemTitle] = useState({ title: "" })
 
   const handleTitleChange = (e) => {
-    setItemTitle(e.target.value)
+    setItemTitle({ title: e.target.value })
+  }
+
+  //adds a list item title with the POST method  (the fornt-end)
+  const addListItem = async (newListItem) => {
+    console.log(newListItem)
+    try {
+      const res = await fetch("/api/listItems/addItem", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newListItem),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log("request response", res)
+          addItem(res.listsItems)
+        })
+    } catch (error) {
+      console.log("Fetch request failed", error)
+    }
   }
 
   const handleItemSubmit = (e) => {
     console.log("itemTitle", itemTitle)
     e.preventDefault()
-    addItem({
-      id: Date.now(),
-      title: itemTitle,
-    })
-    setItemTitle("")
+    addListItem({ ...itemTitle, listId: ObjectId(pid) }) // ---> fetch resquest when item is submmited and send List id schema
+    setItemTitle({ title: "" })
   }
   return (
     <form
@@ -28,7 +57,7 @@ const AddItemForm = ({ addItem }) => {
     >
       <Stack spacing={2} direction="row">
         <TextField
-          value={itemTitle}
+          value={itemTitle.title}
           label="Add a new task"
           color="secondary"
           name="listItem"

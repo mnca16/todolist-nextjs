@@ -9,23 +9,40 @@ import {
 } from "@mui/material"
 import AddIcon from "@mui/icons-material/Add"
 
+// LIST NAMES FORMS
+
 const AddListForm = ({ addNewList }) => {
   //Controlled component
-  const [listTitle, setListTitle] = useState("")
-  console.log(listTitle)
+  const [listTitle, setListTitle] = useState({ name: "" })
 
   const handleListTitleChange = (e) => {
-    setListTitle(e.target.value)
+    setListTitle({ name: e.target.value })
+  }
+
+  //adds a list name with the POST method  (fornt-end)
+  const addList = async (newList) => {
+    try {
+      const res = await fetch("/api/lists/addList", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newList),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          addNewList(res.lists)
+        })
+    } catch (error) {
+      console.log("Fetch request failed", error)
+    }
   }
 
   const handleListSubmit = (e) => {
-    console.log("listTitle", listTitle)
     e.preventDefault()
-    addNewList({
-      id: Date.now(),
-      title: listTitle,
-    })
-    setListTitle("")
+    addList(listTitle) // ---> fetch resquest when list is submmited
+    setListTitle({ name: "" })
   }
 
   return (
@@ -45,7 +62,7 @@ const AddListForm = ({ addNewList }) => {
       <CardActions>
         <form onSubmit={handleListSubmit}>
           <TextField
-            value={listTitle}
+            value={listTitle.name}
             label="Add a new List"
             color="secondary"
             name="listTitle"
