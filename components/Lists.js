@@ -9,8 +9,7 @@ import {
 } from "@mui/material"
 
 //LIST NAMES MAIN PAGE
-const Lists = ({ list }) => {
-  console.log(list)
+const Lists = ({ list, deleteList }) => {
   return (
     <ul style={{ listStyle: "none" }}>
       {list.map((list) => {
@@ -28,11 +27,25 @@ const Lists = ({ list }) => {
             >
               <CardContent>
                 <CardActions>
-                  <Button size="small">Delete List</Button>
+                  <Button
+                    size="small"
+                    onClick={() => {
+                      deleteList(list._id)
+                    }}
+                  >
+                    Delete List
+                  </Button>
                 </CardActions>
                 <CardActionArea>
                   <h1 style={{ margin: "50px" }}>
-                    <Link href={`/todolist/${list._id}`}>{list.name}</Link>
+                    <Link
+                      href={{
+                        pathname: `/todolist/${list._id}`,
+                        query: { slug: list.name },
+                      }}
+                    >
+                      {list.name}
+                    </Link>
                   </h1>
                 </CardActionArea>
               </CardContent>

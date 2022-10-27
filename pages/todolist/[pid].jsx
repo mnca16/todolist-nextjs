@@ -10,13 +10,10 @@ import { useRouter } from "next/router"
 //THIS FILE SHOWS THE LIST TITLE AND ITS ITEMS
 
 const TodoList = ({items}) => {
-  //gets the id from useRouter method --> I'm trying to get the list tittle
+  //gets the id and list title from useRouter method 
   const router = useRouter()
-  const { pid } = router.query
+  const { pid, slug } = router.query
  
-  const listTitle = items.find((item) => item.listId == pid)
-  console.log("LIST_TITLE", listTitle)
-
   const [listItems, setListItems] = useState(items)
 
   const addItem = (newItem) => {  
@@ -29,7 +26,7 @@ const TodoList = ({items}) => {
      <Stack
       sx={{ textAlign: "center", marginTop: "4rem"}}
      >
-     <h1 style={{textAlign: "start"}}>To do List ✔️</h1>
+     <h1 style={{textAlign: "start"}}>{slug} ✔️</h1>
      <Divider />
      <AddItemForm addItem={addItem}/>
      </Stack>  

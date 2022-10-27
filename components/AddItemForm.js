@@ -10,7 +10,6 @@ const AddItemForm = ({ addItem }) => {
   //and send on post request
   const router = useRouter()
   const { pid } = router.query
-  console.log("listId", pid)
 
   //controls input field
   const [itemTitle, setItemTitle] = useState({ title: "" })
@@ -33,7 +32,6 @@ const AddItemForm = ({ addItem }) => {
       })
         .then((res) => res.json())
         .then((res) => {
-          console.log("request response", res)
           addItem(res.listsItems)
         })
     } catch (error) {
@@ -42,7 +40,6 @@ const AddItemForm = ({ addItem }) => {
   }
 
   const handleItemSubmit = (e) => {
-    console.log("itemTitle", itemTitle)
     e.preventDefault()
     addListItem({ ...itemTitle, listId: ObjectId(pid) }) // ---> fetch resquest when item is submmited and send List id schema
     setItemTitle({ title: "" })
