@@ -16,14 +16,18 @@ export default function HomePage({ listsName }) {
   }
 
   const deleteList = (id) => {
-    fetch(DELETEurl, {
-      method: "Delete",
-      headers: {
-        Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`,
-      },
-    })
-    const removedItem = todoList.filter((todo) => todo.id !== id)
-    setList([...list, listsName])
+    console.log("id from deleList", id)
+    try {
+      fetch(`/api/lists/${id}`, {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      })
+    } catch (error) {
+      console.log("fetch request failed", error)
+    }
   }
 
   return (
@@ -35,7 +39,7 @@ export default function HomePage({ listsName }) {
       </Head>
       <h1>Next.js project</h1>
       <AddListForm addNewList={addNewList} />
-      <Lists list={list} delteList={deleteList} />
+      <Lists list={list} deleteList={deleteList} />
     </div>
   )
 }
