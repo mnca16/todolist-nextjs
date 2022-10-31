@@ -22,8 +22,13 @@ const itemSchema = new Schema({
     required: true,
     unique: true,
   },
-  status: {
-    type: String,
+  completed: {
+    type: Boolean,
+    default: false,
+  },
+  deleted: {
+    type: Boolean,
+    default: false,
   },
   listId: {
     type: mongoose.Schema.Types.ObjectId,

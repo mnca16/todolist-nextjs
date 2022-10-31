@@ -27,6 +27,10 @@ const listSchema = new Schema({
     required: true,
     unique: true,
   },
+  deleted: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const List = models.List || model("List", listSchema)
