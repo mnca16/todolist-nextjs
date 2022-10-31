@@ -20,7 +20,6 @@ const AddItemForm = ({ addItem }) => {
 
   //adds a list item title with the POST method  (the fornt-end)
   const addListItem = async (newListItem) => {
-    console.log(newListItem)
     try {
       const res = await fetch("/api/listItems/addItem", {
         method: "POST",
