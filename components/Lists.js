@@ -41,7 +41,7 @@ const Lists = ({ list, deleteList }) => {
                     <Link
                       href={{
                         pathname: `/todolist/${list._id}`,
-                        query: { slug: list.name },
+                        query: { title: list.name },
                       }}
                     >
                       {list.name}
