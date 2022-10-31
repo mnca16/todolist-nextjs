@@ -1,13 +1,11 @@
 import connectMongo from "../../../lib/connectMongo"
-import List from "../../../models/list"
+import Items from "../../../models/listItems"
 
 // NEXT.JS BUILT IN API GETS LIST TITLES
-
-//Do I need this api?
-export default async function getList(req, res) {
+export default async function getItems(req, res) {
   try {
     await connectMongo()
-    const lists = await List.find({}) // ---> mongoose read method
+    const lists = await Items.find({}) // ---> mongoose read method (reads all the data)
     res.json({ lists })
   } catch (error) {
     res.json({ error })
