@@ -29,6 +29,6 @@ export default async function deleteItem(req, res) {
       return res.json({ message: "there is not list available" })
     }
   } catch (error) {
-    res.json({ error })
+    res.status(500).json({ error })
   }
 }
