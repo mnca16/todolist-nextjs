@@ -19,12 +19,21 @@ export default function HomePage({ listsName }) {
     console.log("id from deleList", id)
     try {
       fetch(`/api/lists/${id}`, {
-        method: "DELETE",
+        method: "PATCH",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({ deleted: true }),
       })
+        .then((res) => res.json())
+        .then((res) => {
+          const deletedList = list.filter(
+            (item) => item._id !== res.deletedList._id
+          )
+          console.log("deletedList", deletedList)
+          setList(deletedList)
+        })
     } catch (error) {
       console.log("fetch request failed", error)
     }
@@ -47,7 +56,7 @@ export default function HomePage({ listsName }) {
 export async function getServerSideProps() {
   await connectMongo() // ---> connects to mongo
   try {
-    const listSchemaResult = await List.find({}) // ---> grabs the schema with the and uses mongoose get(find) method (CRUD)
+    const listSchemaResult = await List.find({ deleted: false }) // ---> grabs the schema with the and uses mongoose get(find) method (CRUD)
     const listsName = listSchemaResult.map((doc) => {
       //converts the mongoose document to js object
       const list = doc.toObject()

@@ -6,7 +6,13 @@ export default async function deleteList(req, res) {
   const { deleteListID } = req.query // ---> next.js dynamic API request helper
   try {
     await connectMongo()
-    const deletedListTitle = await List.deleteOne({ _id: deleteListID })
+    const deletedListTitle = await List.findByIdAndUpdate(deleteListID, {
+      deleted: true,
+    })
+
+    const deletedList = await List.findById(deleteListID)
+    console.log("deleteItem", deletedList)
+    res.json({ deletedList })
 
     //
     // const deletedListTitle = await List.deleteOne({
@@ -17,6 +23,6 @@ export default async function deleteList(req, res) {
       return res.json({ message: "there is not list available" })
     }
   } catch (error) {
-    res.json({ error })
+    res.status(500).json({ error })
   }
 }
