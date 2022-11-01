@@ -8,7 +8,7 @@ import {
 } from "@mui/material"
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation"
 
-const Item = ({ item, deleteItem, checkItem, handleChangeCheck, checked }) => {
+const Item = ({ item, deleteItem, handleChangeCheck }) => {
   return (
     <ListItem
       secondaryAction={
@@ -26,10 +26,8 @@ const Item = ({ item, deleteItem, checkItem, handleChangeCheck, checked }) => {
       <ListItemIcon>
         <Checkbox
           edge="start"
-          checked={checked}
           onChange={(e) => {
-            checkItem(item._id)
-            handleChangeCheck(e)
+            handleChangeCheck(item._id, e)
           }}
         />
       </ListItemIcon>

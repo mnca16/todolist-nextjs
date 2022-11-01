@@ -2,13 +2,7 @@ import React from "react"
 import Item from "./Item"
 import { List } from "@mui/material"
 
-const ListItems = ({
-  listItems,
-  deleteItem,
-  checkItem,
-  handleChangeCheck,
-  checked,
-}) => {
+const ListItems = ({ listItems, deleteItem, handleChangeCheck }) => {
   return (
     <List
       sx={{
@@ -24,9 +18,7 @@ const ListItems = ({
             key={item._id}
             item={item}
             deleteItem={deleteItem}
-            checkItem={checkItem}
             handleChangeCheck={handleChangeCheck}
-            checked={checked}
           />
         )
       })}
