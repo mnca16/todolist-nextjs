@@ -5,9 +5,9 @@ import List from "../../../models/list"
 export default async function getList(req, res) {
   try {
     await connectMongo()
-    const lists = await List.find({}) // ---> mongoose read method (reads all the data)
-    res.json({ lists })
+    const lists = await List.find({ deleted: false }) // ---> mongoose read method (reads all the data)
+    res.status(200).json({ lists })
   } catch (error) {
-    res.json({ error })
+    res.status(500).json({ error })
   }
 }

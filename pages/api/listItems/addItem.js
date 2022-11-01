@@ -6,8 +6,9 @@ export default async function addListItem(req, res) {
   try {
     await connectMongo() //connects with db
     const listsItems = await Items.create(req.body) // ---> mangoose read method
-    res.json({ listsItems })
+    res.status(200).json({ listsItems })
   } catch (error) {
-    res.json({ error })
+    console.log(error)
+    res.status(500).json({ error })
   }
 }
