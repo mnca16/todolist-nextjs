@@ -20,7 +20,6 @@ const itemSchema = new Schema({
   title: {
     type: String,
     required: true,
-    unique: true,
   },
   completed: {
     type: Boolean,
