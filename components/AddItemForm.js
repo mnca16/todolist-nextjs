@@ -60,7 +60,12 @@ const AddItemForm = ({ addItem }) => {
           onChange={handleTitleChange}
           fullWidth
         />
-        <Button type="submit" size="large" variant="contained">
+        <Button
+          type="submit"
+          size="large"
+          variant="contained"
+          color="secondary"
+        >
           Add
         </Button>
       </Stack>

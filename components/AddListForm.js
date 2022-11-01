@@ -6,6 +6,7 @@ import {
   Typography,
   TextField,
   IconButton,
+  Card,
 } from "@mui/material"
 import AddIcon from "@mui/icons-material/Add"
 
@@ -54,6 +55,7 @@ const AddListForm = ({ addNewList }) => {
         transition: "0.3s",
         width: "30%",
         padding: "1rem 0 1.5rem 2rem",
+        margin: "4rem 0 1rem 10rem",
       }}
     >
       <CardContent>

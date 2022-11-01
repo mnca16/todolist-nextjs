@@ -25,6 +25,7 @@ const Item = ({ item, deleteItem, handleChangeCheck }) => {
     >
       <ListItemIcon>
         <Checkbox
+          color="secondary"
           edge="start"
           onChange={(e) => {
             handleChangeCheck(item._id, e)

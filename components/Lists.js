@@ -2,58 +2,69 @@ import React, { useState } from "react"
 import Link from "next/Link"
 import {
   CardActionArea,
-  Box,
+  IconButton,
   CardContent,
   CardActions,
   Button,
+  Grid,
 } from "@mui/material"
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation"
 
 //LIST NAMES MAIN PAGE
 const Lists = ({ list, deleteList }) => {
   return (
-    <ul style={{ listStyle: "none" }}>
+    <Grid
+      container
+      spacing={0}
+      direction="row"
+      justifyContent="center"
+      alignItems="center"
+    >
       {list.map((list) => {
         return (
-          <li key={list._id}>
-            <Box
-              sx={{
-                backgroundColor: "#E6E6FA",
-                marginTop: "4rem",
-                borderRadius: "10px",
-                boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)",
-                transition: "0.3s",
-                width: "20%",
-              }}
-            >
-              <CardContent>
-                <CardActions>
-                  <Button
-                    size="small"
-                    onClick={() => {
-                      deleteList(list._id)
+          <Grid
+            sx={{
+              backgroundColor: "#E6E6FA",
+              marginTop: "4rem",
+              borderRadius: "10px",
+              boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)",
+              transition: "0.3s",
+              width: "20%",
+              xs: "12",
+            }}
+            key={list._id}
+            item
+            m={5}
+          >
+            <CardContent>
+              <CardActions>
+                <IconButton
+                  sx={{ marginLeft: "12rem" }}
+                  size="small"
+                  onClick={() => {
+                    deleteList(list._id)
+                  }}
+                >
+                  <CancelPresentationIcon />
+                </IconButton>
+              </CardActions>
+              <CardActionArea>
+                <h1 style={{ margin: "50px" }}>
+                  <Link
+                    href={{
+                      pathname: `/todolist/${list._id}`,
+                      query: { title: list.name },
                     }}
                   >
-                    Delete List
-                  </Button>
-                </CardActions>
-                <CardActionArea>
-                  <h1 style={{ margin: "50px" }}>
-                    <Link
-                      href={{
-                        pathname: `/todolist/${list._id}`,
-                        query: { title: list.name },
-                      }}
-                    >
-                      {list.name}
-                    </Link>
-                  </h1>
-                </CardActionArea>
-              </CardContent>
-            </Box>
-          </li>
+                    {list.name}
+                  </Link>
+                </h1>
+              </CardActionArea>
+            </CardContent>
+          </Grid>
         )
       })}
-    </ul>
+    </Grid>
   )
 }
 
