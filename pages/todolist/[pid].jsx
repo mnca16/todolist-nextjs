@@ -12,7 +12,7 @@ import { useRouter } from "next/router"
 const TodoList = ({items}) => {
   //gets the id and list title from useRouter method 
   const router = useRouter()
-  const { title } = router.query
+  const { title, pid } = router.query
  
   const [listItems, setListItems] = useState(items) // --> listItems state
   const [checked, setChecked] = useState(true)
@@ -22,9 +22,8 @@ const TodoList = ({items}) => {
      setListItems([...listItems, newItem])    
   }
 
-  //Soft deletes the seletec item and updates the UI
+  //Soft deletes the seletec item and updates the UI with the api response 
   const deleteItem = async (id) => {
-    console.log("item id", id)
     try {
        await fetch(`/api/listItems/deleteItem/${id}`, {
         method: "PATCH",
@@ -37,8 +36,8 @@ const TodoList = ({items}) => {
       })
       .then((res) => res.json())
       .then((res) => {
-        const deletedItem = listItems.filter((item) => item._id !== res.deletedItem._id)
-        console.log("deletedItem", deleteItem)
+        const deletedItem = listItems.filter((item) => 
+        item._id !== res.deletedItem._id)
         setListItems(deletedItem)
       })
     } catch (error) {
@@ -48,13 +47,13 @@ const TodoList = ({items}) => {
 
  //Get items function API
   const getItems = async () => {
-    console.log("This Function is running!!!!!!")
       try {
         await fetch("/api/listItems/getItems")
         .then(resp => resp.json())
         .then(res =>
-          {console.log(res.lists)
-          setListItems(res.lists)})
+          {
+          const currentItems = res.lists.filter((item) =>  item.listId === pid)
+          setListItems(currentItems)})
       } catch (error) {
         console.log("fetch request failed", error)
       }
@@ -62,7 +61,6 @@ const TodoList = ({items}) => {
   
   //Updates completed item
   const checkItem = async (id) => {
-    console.log("CHECK ITEM IS RUNNING!!")
     try {
       await fetch(`/api/listItems/completeItem/${id}`, {
         method: "PATCH",
@@ -72,7 +70,9 @@ const TodoList = ({items}) => {
         },
       })
       .then(resp => resp.json())
-      .then(res => { getItems()})
+      .then(res => { 
+        getItems()
+      })
     } catch (error) {
       console.log("fetch request failed", error)
     }
