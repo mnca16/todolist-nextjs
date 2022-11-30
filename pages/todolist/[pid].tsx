@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React, {useState, ChangeEvent} from "react"
 import { Stack, Box, Divider} from "@mui/material"
 import AddItemForm from "../../components/AddItemForm"
 import ListItems from "../../components/ListItems"
@@ -6,10 +6,24 @@ import connectMongo from "../../lib/connectMongo"
 import Items from "../../models/listItems"
 import { ObjectId } from "bson"
 import { useRouter } from "next/router"
+import { GetServerSideProps, NextPage } from "next"
+
+interface Items {
+  completed: boolean,
+  deleted: boolean,
+  listId: string,
+  title: string,
+  _v: number,
+  _id: string
+}
+
+interface TodoListProps {
+  items: Items[]
+}
+
 
 //THIS FILE SHOWS THE LIST TITLE AND ITS ITEMS
-
-const TodoList = ({items}) => {
+const TodoList: NextPage<TodoListProps> = ({items}) => {
   //gets the id and list title from useRouter method 
   const router = useRouter()
   const { title, pid } = router.query
@@ -18,12 +32,13 @@ const TodoList = ({items}) => {
   const [checked, setChecked] = useState(true)
   
   //Adds new item and updates the UI
-  const addItem = (newItem) => {  
+  //Used Item interface
+  const addItem = (newItem: Items) => {  
      setListItems([...listItems, newItem])    
   }
 
   //Soft deletes the seletec item and updates the UI with the api response 
-  const deleteItem = async (id) => {
+  const deleteItem = async (id: string) => {
     try {
        await fetch(`/api/listItems/deleteItem/${id}`, {
         method: "PATCH",
@@ -52,7 +67,8 @@ const TodoList = ({items}) => {
         .then(resp => resp.json())
         .then(res =>
           {
-          const currentItems = res.lists.filter((item) =>  item.listId === pid)
+          const currentItems = res.lists.filter((item: Items) => 
+            item.listId === pid && item.deleted === false)
           setListItems(currentItems)})
       } catch (error) {
         console.log("fetch request failed", error)
@@ -60,7 +76,7 @@ const TodoList = ({items}) => {
   }  
   
   //Updates completed item
-  const checkItem = async (id) => {
+  const checkItem = async (id: string) => {
     try {
       await fetch(`/api/listItems/completeItem/${id}`, {
         method: "PATCH",
@@ -78,7 +94,7 @@ const TodoList = ({items}) => {
     }
   }
  
-  const handleChangeCheck = (id, e) => {
+  const handleChangeCheck = (id: string, e: ChangeEvent<HTMLInputElement>) => {
     setChecked(e.target.checked)
     //conditional sends requests to update item complete status
     checked ? checkItem(id) : checkItem(id)
@@ -116,14 +132,16 @@ const TodoList = ({items}) => {
   )
 }
 
+type Params = {
+  params: {pid: string} 
+}
 
-export async function getServerSideProps({ params }) {
-  console.log("params typeof", typeof params.pid)
+export const getServerSideProps: GetServerSideProps = async ({ params }: Params) => {
   //connect to MONGODB
   await connectMongo()
 
   try {
-    const itemsSchemaResult = await Items.find({ listId: ObjectId(params.pid), deleted: false})// --> gets the right schema with the ObjectId List
+    const itemsSchemaResult = await Items.find({ listId:  new ObjectId(params.pid), deleted: false})// --> gets the right schema with the ObjectId List
     const items = itemsSchemaResult.map((doc) => {
       const item = doc.toObject()
       item._id = item._id.toString()
@@ -144,5 +162,47 @@ export async function getServerSideProps({ params }) {
     }
   }
 }
+
+// export async function getServerSideProps({ params }) {
+//   console.log("params typeof", typeof params.pid)
+//   //connect to MONGODB
+//   await connectMongo()
+
+//   try {
+//     const itemsSchemaResult = await Items.find({ listId: ObjectId(params.pid), deleted: false})// --> gets the right schema with the ObjectId List
+//     const items = itemsSchemaResult.map((doc) => {
+//       const item = doc.toObject()
+//       item._id = item._id.toString()
+//       item.listId = item.listId.toString()
+//       return item
+//     })
+   
+//     return {
+//       props: { 
+//         items: items,
+//        }
+//     }
+
+//   } catch (error) {
+//     console.log(error)
+//     return {
+//       notFound: true,
+//     }
+//   }
+// }
+
+/*
+Links for ObjectID:
+https://github.com/Automattic/mongoose/issues/10960
+https://stackoverflow.com/questions/69863210/upgrade-mongoose-from-5-to-6-value-of-type-typeof-objectid-is-not-callable-di
+https://stackoverflow.com/questions/38939507/error-ts2348-value-of-type-typeof-objectid-is-not-callable-did-you-mean-to-i
+
+Links for params (on GetServerSideProps params) error:
+https://github.com/vercel/next.js/discussions/16522
+https://github.com/vercel/next.js/issues/11033
+https://nextjs.org/docs/api-reference/data-fetching/get-server-side-props
+
+*/
+
 
 export default TodoList

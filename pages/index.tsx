@@ -5,18 +5,31 @@ import AddListForm from "../components/AddListForm"
 import Lists from "../components/Lists"
 import connectMongo from "../lib/connectMongo"
 import List from "../models/list"
+import { GetServerSideProps, NextPage } from "next"
+
 
 // THIS INDEX FILE SHOWS THE LISTS
 
-export default function HomePage({ listsName }) {
+interface ListsNames {
+  deleted: boolean,
+  name: string,
+  _v: number,
+  _id: string
+}
+
+interface HomePageProps {
+  listsName: ListsNames[]
+}
+
+//export default function HomePage({ listsName }) {
+const HomePage: NextPage<HomePageProps> = ({ listsName }) => {
   const [list, setList] = useState(listsName)
 
-  const addNewList = (newList) => {
+  const addNewList = (newList: ListsNames) => {
     setList([...list, newList])
   }
 
-  const deleteList = (id) => {
-    console.log("id from deleList", id)
+  const deleteList = (id: number) => {
     try {
       fetch(`/api/lists/${id}`, {
         method: "PATCH",
@@ -31,7 +44,6 @@ export default function HomePage({ listsName }) {
           const deletedList = list.filter(
             (item) => item._id !== res.deletedList._id
           )
-          console.log("deletedList", deletedList)
           setList(deletedList)
         })
     } catch (error) {
@@ -53,7 +65,7 @@ export default function HomePage({ listsName }) {
 }
 
 //Get list names from mongo using ServerSide props which would render the first time
-export async function getServerSideProps() {
+export const getServerSideProps: GetServerSideProps = async () => {
   await connectMongo() // ---> connects to mongo
   try {
     const listSchemaResult = await List.find({ deleted: false }) // ---> grabs the schema with the and uses mongoose get(find) method (CRUD)
@@ -73,3 +85,26 @@ export async function getServerSideProps() {
     }
   }
 }
+
+export default HomePage
+
+// export async function getServerSideProps() {
+//   await connectMongo() // ---> connects to mongo
+//   try {
+//     const listSchemaResult = await List.find({ deleted: false }) // ---> grabs the schema with the and uses mongoose get(find) method (CRUD)
+//     const listsName = listSchemaResult.map((doc) => {
+//       //converts the mongoose document to js object
+//       const list = doc.toObject()
+//       list._id = list._id.toString()
+//       return list
+//     })
+//     return {
+//       props: { listsName: listsName },
+//     }
+//   } catch (error) {
+//     console.log(error)
+//     return {
+//       notFound: true,
+//     }
+//   }
+// }
