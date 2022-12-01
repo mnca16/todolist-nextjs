@@ -29,7 +29,7 @@ const HomePage: NextPage<HomePageProps> = ({ listsName }) => {
     setList([...list, newList])
   }
 
-  const deleteList = (id: number) => {
+  const deleteList = (id: string) => {
     try {
       fetch(`/api/lists/${id}`, {
         method: "PATCH",
@@ -87,6 +87,23 @@ export const getServerSideProps: GetServerSideProps = async () => {
 }
 
 export default HomePage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // export async function getServerSideProps() {
 //   await connectMongo() // ---> connects to mongo

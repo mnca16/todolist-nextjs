@@ -6,7 +6,9 @@ import connectMongo from "../../lib/connectMongo"
 import Items from "../../models/listItems"
 import { ObjectId } from "bson"
 import { useRouter } from "next/router"
-import { GetServerSideProps, NextPage } from "next"
+import { GetServerSideProps, NextPage, GetServerSidePropsContext} from "next"
+//import { ParsedUrlQuery } from 'node:querystring'
+import { ParsedUrlQuery } from 'querystring';
 
 interface Items {
   completed: boolean,
@@ -132,16 +134,24 @@ const TodoList: NextPage<TodoListProps> = ({items}) => {
   )
 }
 
-type Params = {
-  params: {pid: string} 
+
+interface Params extends ParsedUrlQuery {
+  pid: string
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ params }: Params) => {
+// interface Params = {
+//   params: {pid: string} 
+// }
+
+// export const getServerSideProps: GetServerSideProps = async ({ params }: Params) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const { pid } = params as Params;
+  console.log("pid from seversideprops", typeof pid)
   //connect to MONGODB
   await connectMongo()
 
   try {
-    const itemsSchemaResult = await Items.find({ listId:  new ObjectId(params.pid), deleted: false})// --> gets the right schema with the ObjectId List
+    const itemsSchemaResult = await Items.find({ listId: new ObjectId(pid), deleted: false})// --> gets the right schema with the ObjectId List
     const items = itemsSchemaResult.map((doc) => {
       const item = doc.toObject()
       item._id = item._id.toString()
@@ -162,6 +172,21 @@ export const getServerSideProps: GetServerSideProps = async ({ params }: Params)
     }
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // export async function getServerSideProps({ params }) {
 //   console.log("params typeof", typeof params.pid)
@@ -202,6 +227,12 @@ https://github.com/vercel/next.js/discussions/16522
 https://github.com/vercel/next.js/issues/11033
 https://nextjs.org/docs/api-reference/data-fetching/get-server-side-props
 
+
+Links for Params ServerSideError Property 'pid' does not exist on type 'ParsedUrlQuery | undefined'
+https://wallis.dev/blog/nextjs-getstaticprops-and-getstaticpaths-with-typescript
+https://github.com/vercel/next.js/discussions/16522
+https://www.google.com/search?q=const+getServerSideProps%3A+GetServerSideProps%3C%7B+%5Bkey%3A+string%5D%3A+any%3B+%7D%2C+ParsedUrlQuery%2C+PreviewData%3E&rlz=1C1CHBF_enUS862US863&oq=const+getServerSideProps%3A+GetServerSideProps%3C%7B+%5Bkey%3A+string%5D%3A+any%3B+%7D%2C+ParsedUrlQuery%2C+PreviewData%3E&aqs=chrome..69i57.585j0j7&sourceid=chrome&ie=UTF-8
+https://nextjs.org/docs/api-reference/data-fetching/get-server-side-props
 */
 
 

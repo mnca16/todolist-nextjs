@@ -19,6 +19,14 @@ used.
 - in this case is being use with the logical operator.
 */
 
+/*
+other schema properties:
+  trim: true,
+  unique: true
+  minLength: 3,
+  maxLength: 10,
+*/
+
 import { Schema, model, models } from "mongoose"
 
 const listSchema = new Schema({

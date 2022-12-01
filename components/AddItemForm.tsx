@@ -1,25 +1,43 @@
 import { Button, Stack, TextField } from "@mui/material"
-import React, { useState } from "react"
+import React, { useState, ChangeEvent, FormEvent } from "react"
 import { useRouter } from "next/router"
 import { ObjectId } from "bson"
 
 //LIST ITEMS FORM
 
-const AddItemForm = ({ addItem }) => {
+interface Items {
+  completed: boolean,
+  deleted: boolean,
+  listId: string,
+  title: string, 
+  _v: number,
+  _id: string
+}
+
+interface AddItemProps {
+  addItem: (newItem: Items) => void
+}
+
+const AddItemForm = ({ addItem }: AddItemProps) => {
   //gets the id from useRouter method
   //and send on post request
   const router = useRouter()
-  const { pid } = router.query
+  const { pid } = router.query 
 
   //controls input field
   const [itemTitle, setItemTitle] = useState({ title: "" })
 
-  const handleTitleChange = (e) => {
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setItemTitle({ title: e.target.value })
   }
-
+   
+  interface AddListName {
+    title: string,
+    listId: ObjectId;
+  }
+  
   //adds a list item title with the POST method  (the fornt-end)
-  const addListItem = async (newListItem) => {
+  const addListItem = async (newListItem: AddListName) => {
     try {
       const res = await fetch("/api/listItems/addItem", {
         method: "POST",
@@ -37,12 +55,18 @@ const AddItemForm = ({ addItem }) => {
       console.log("Fetch request failed", error)
     }
   }
-
-  const handleItemSubmit = (e) => {
+  
+  //Note:
+  /*
+  pid has string | string[] | undefined as a values
+  I specified it as string because that is what ObjectId expects 
+  */
+  const handleItemSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    addListItem({ ...itemTitle, listId: ObjectId(pid) }) // ---> fetch resquest when item is submmited and send List id schema
+    addListItem({ ...itemTitle, listId: new ObjectId(pid as string) }) // ---> fetch resquest when item is submmited and send List id schema
     setItemTitle({ title: "" })
   }
+
   return (
     <form
       onSubmit={handleItemSubmit}
@@ -74,3 +98,14 @@ const AddItemForm = ({ addItem }) => {
 }
 
 export default AddItemForm
+
+
+/*
+Useful Links:
+ObjectID type
+https://www.designcise.com/web/tutorial/which-type-to-use-for-mongoose-objectid-in-a-typescript-interface
+
+Function as props:
+https://bobbyhadz.com/blog/react-typescript-pass-function-as-prop
+
+*/

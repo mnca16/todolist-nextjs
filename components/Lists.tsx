@@ -1,17 +1,29 @@
-import React, { useState } from "react"
-import Link from "next/Link"
+import React from "react"
+import Link from "next/link"
 import {
   CardActionArea,
   IconButton,
   CardContent,
   CardActions,
-  Button,
   Grid,
 } from "@mui/material"
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation"
 
+interface ListsNames {
+  deleted: boolean,
+  name: string,
+  _v: number,
+  _id: string
+}
+
+interface ListProps {
+  list: ListsNames[],
+  deleteList: (id: string) => void,
+}
+
+
 //LIST NAMES MAIN PAGE
-const Lists = ({ list, deleteList }) => {
+const Lists = ({ list, deleteList }: ListProps) => {
   return (
     <Grid
       container
@@ -20,7 +32,7 @@ const Lists = ({ list, deleteList }) => {
       justifyContent="center"
       alignItems="center"
     >
-      {list.map((list) => {
+      {list.map((list: ListsNames) => {
         return (
           <Grid
             sx={{
