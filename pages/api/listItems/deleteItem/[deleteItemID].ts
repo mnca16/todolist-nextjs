@@ -1,6 +1,6 @@
 import connectMongo from "../../../../lib/connectMongo"
 import Items from "../../../../models/listItems"
-
+import { NextApiRequest, NextApiResponse } from "next"
 //To get info from the request paramenter (Next.js helpers)
 //You can request info from the body or URL
 
@@ -10,7 +10,7 @@ req.query ---> URL
 */
 
 // NEXT.JS BUILT IN API DELETES LIST TITLES BY ID
-export default async function deleteItem(req, res) {
+export default async function deleteItem(req: NextApiRequest, res: NextApiResponse) {
   const { deleteItemID } = req.query // ---> next.js dynamic API request helper
   console.log("req.query", req.body)
 

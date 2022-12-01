@@ -1,8 +1,9 @@
 import connectMongo from "../../../lib/connectMongo"
 import List from "../../../models/list"
+import { NextApiRequest, NextApiResponse } from "next"
 
 // NEXT.JS BUILT IN API DELETES LIST TITLES BY ID
-export default async function deleteList(req, res) {
+export default async function deleteList(req: NextApiRequest, res: NextApiResponse) {
   const { deleteListID } = req.query // ---> next.js dynamic API request helper
   try {
     await connectMongo()

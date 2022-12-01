@@ -1,13 +1,18 @@
 import mongoose, { Schema, model, models, Document, Model } from "mongoose"
 
 interface Iitem extends Document {
+listId: mongoose.Types.ObjectId
 title: string,
 completed: boolean,
 deleted: boolean,
-listId: mongoose.Types.ObjectId
+
 }
 
 const itemSchema = new Schema<Iitem>({
+  listId: {
+    type: Schema.Types.ObjectId,
+    ref: "listSchema",
+  },
   title: {
     type: String,
     required: true,
@@ -20,10 +25,7 @@ const itemSchema = new Schema<Iitem>({
     type: Boolean,
     default: false,
   },
-  listId: {
-    type: Schema.Types.ObjectId,
-    ref: "listSchema",
-  },
+  
 })
 
 //ref: reference the needed table using the name of the schema and
