@@ -2,15 +2,6 @@ import React, {ChangeEvent} from "react"
 import Item from "./Item"
 import { List } from "@mui/material" 
 
-// interface Items {
-//   completed: boolean,
-//   deleted: boolean,
-//   listId: string,
-//   title: string,
-//   _v: number,
-//   _id: string
-// }
-
 interface ListItemsProps {
   listItems: Items[],
   deleteItem: (id: string) => void,

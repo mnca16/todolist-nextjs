@@ -9,13 +9,6 @@ import {
 } from "@mui/material"
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation"
 
-// interface ListsNames {
-//   deleted: boolean,
-//   name: string,
-//   _v: number,
-//   _id: string
-// }
-
 interface ListProps {
   list: ListsNames[],
   deleteList: (id: string) => void,

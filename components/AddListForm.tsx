@@ -10,16 +10,8 @@ import {
 import AddIcon from "@mui/icons-material/Add"
 
 // LIST NAMES FORMS
-
-// interface ListsNames {
-//   deleted: boolean,
-//   name: string,
-//   _v: number,
-//   _id: string
-// }
-
 interface AddListProps {
-  addNewList: (newItem: ListsNames) => void
+  addNewList: (newList: {name: string}) => void
 }
 
 const AddListForm = ({ addNewList }: AddListProps) => {
@@ -29,31 +21,10 @@ const AddListForm = ({ addNewList }: AddListProps) => {
   const handleListTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setListTitle({ name: e.target.value })
   }
-  
-
-  //adds a list name with the POST method  (fornt-end)
-  const addList = async (newList: {name: string}) => {
-    try {
-      const res = await fetch("/api/lists/addList", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newList),
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          addNewList(res.lists)
-        })
-    } catch (error) {
-      console.log("Fetch request failed", error)
-    }
-  }
 
   const handleListSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    addList(listTitle) // ---> fetch resquest when list is submmited
+    addNewList(listTitle) // ---> fetch resquest when list is submmited\
     setListTitle({ name: "" })
   }
 

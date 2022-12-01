@@ -13,3 +13,8 @@ interface Items {
   _v: number,
   _id: string
 }
+
+interface AddListName {
+  title: string,
+  listId: ObjectId;
+}
