@@ -15,11 +15,6 @@ export default async function deleteList(req: NextApiRequest, res: NextApiRespon
     console.log("deleteItem", deletedList)
     res.json({ deletedList })
 
-    //
-    // const deletedListTitle = await List.deleteOne({
-    //   _id: "63586827d68664c0451bf0c2",
-    // })
-
     if (!deletedListTitle) {
       return res.json({ message: "there is not list available" })
     }
@@ -27,3 +22,8 @@ export default async function deleteList(req: NextApiRequest, res: NextApiRespon
     res.status(500).json({ error })
   }
 }
+
+
+    // const deletedListTitle = await List.deleteOne({
+    //   _id: "63586827d68664c0451bf0c2",
+    // })

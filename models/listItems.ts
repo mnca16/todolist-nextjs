@@ -8,6 +8,9 @@ deleted: boolean,
 
 }
 
+//ref: reference the needed table using the name of the schema and
+//the ObjectId sent on the fetch request
+
 const itemSchema = new Schema<Iitem>({
   listId: {
     type: Schema.Types.ObjectId,
@@ -28,27 +31,8 @@ const itemSchema = new Schema<Iitem>({
   
 })
 
-//ref: reference the needed table using the name of the schema and
-//the ObjectId sent on the fetch request
-
 const Items = models.Items as Model<Iitem> || model<Iitem>("Items", itemSchema)
 
 export default Items
 
-
-// - Lists <-- collection
-// 	{
-// 		_id: <mongo_id>,
-// 		title: ''
-// 	}
-
-// - Items <-- collection
-// 	{
-// 		_id: <mongo_id>,
-// 		title,
-// 		status, --> active, completed, deleted
-// 		list_id
-// 	}
-
-// db.collection('Items').find({list_id : <id>, status : 'active'}).sort({_id: 1}) -> Mongodb
 
