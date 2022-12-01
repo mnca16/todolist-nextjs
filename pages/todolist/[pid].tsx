@@ -9,6 +9,7 @@ import { useRouter } from "next/router"
 import { GetServerSideProps, NextPage} from "next"
 //import { ParsedUrlQuery } from 'node:querystring' 
 import { ParsedUrlQuery } from 'querystring';
+import { Container } from "@mui/material"
 
 interface TodoListProps {
   items: Items[] //Items interface comes from types.d.ts file
@@ -114,6 +115,7 @@ const TodoList: NextPage<TodoListProps> = ({items}) => {
   const incompletedItems = listItems.filter((item) => item.completed === false)
   
   return (
+    <Container fixed>
     <Box sx={{margin: "auto", width: "60%", padding: "10px"}}>
      <Stack
       sx={{ textAlign: "center", marginTop: "4rem"}}
@@ -139,6 +141,7 @@ const TodoList: NextPage<TodoListProps> = ({items}) => {
         />
      </Stack>
     </Box>  
+    </Container>
   )
 }
 
