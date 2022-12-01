@@ -2,12 +2,12 @@ import mongoose from "mongoose"
 
 const mongoUri: string = process.env.MONGO_URI || ""
 
-//add an if statement
-
-const connectMongo = async () =>
-  mongoose.connect(mongoUri).catch((err) => {
-    console.log(err)
-  })
+const connectMongo = async () => {
+  if (mongoUri === "") {
+    throw new Error('enviroment variable undefined')
+  }
+  mongoose.connect(mongoUri).catch((err) => {console.log(err)})
+}
 
 export default connectMongo
 
