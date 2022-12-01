@@ -10,12 +10,12 @@ import { GetServerSideProps, NextPage } from "next"
 
 // THIS INDEX FILE SHOWS THE LISTS
 
-interface ListsNames {
-  deleted: boolean,
-  name: string,
-  _v: number,
-  _id: string
-}
+// interface ListsNames {
+//   deleted: boolean,
+//   name: string,
+//   _v: number,
+//   _id: string
+// }
 
 interface HomePageProps {
   listsName: ListsNames[]
@@ -72,7 +72,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
     const listsName = listSchemaResult.map((doc) => {
       //converts the mongoose document to js object
       const list = doc.toObject()
-      list._id = list._id.toString()
+      list._id = list._id?.toString()
       return list
     })
     return {

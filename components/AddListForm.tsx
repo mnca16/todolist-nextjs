@@ -11,12 +11,12 @@ import AddIcon from "@mui/icons-material/Add"
 
 // LIST NAMES FORMS
 
-interface ListsNames {
-  deleted: boolean,
-  name: string,
-  _v: number,
-  _id: string
-}
+// interface ListsNames {
+//   deleted: boolean,
+//   name: string,
+//   _v: number,
+//   _id: string
+// }
 
 interface AddListProps {
   addNewList: (newItem: ListsNames) => void

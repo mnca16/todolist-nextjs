@@ -10,14 +10,14 @@ import { GetServerSideProps, NextPage, GetServerSidePropsContext} from "next"
 //import { ParsedUrlQuery } from 'node:querystring'
 import { ParsedUrlQuery } from 'querystring';
 
-interface Items {
-  completed: boolean,
-  deleted: boolean,
-  listId: string,
-  title: string,
-  _v: number,
-  _id: string
-}
+// interface Items {
+//   completed: boolean,
+//   deleted: boolean,
+//   listId: string,
+//   title: string,
+//   _v: number,
+//   _id: string
+// }
 
 interface TodoListProps {
   items: Items[]
@@ -154,7 +154,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     const itemsSchemaResult = await Items.find({ listId: new ObjectId(pid), deleted: false})// --> gets the right schema with the ObjectId List
     const items = itemsSchemaResult.map((doc) => {
       const item = doc.toObject()
-      item._id = item._id.toString()
+      item._id = item._id?.toString()
       item.listId = item.listId.toString()
       return item
     })

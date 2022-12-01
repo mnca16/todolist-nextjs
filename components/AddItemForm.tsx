@@ -5,14 +5,14 @@ import { ObjectId } from "bson"
 
 //LIST ITEMS FORM
 
-interface Items {
-  completed: boolean,
-  deleted: boolean,
-  listId: string,
-  title: string, 
-  _v: number,
-  _id: string
-}
+// interface Items {
+//   completed: boolean,
+//   deleted: boolean,
+//   listId: string,
+//   title: string, 
+//   _v: number,
+//   _id: string
+// }
 
 interface AddItemProps {
   addItem: (newItem: Items) => void
