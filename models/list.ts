@@ -19,9 +19,22 @@ used.
 - in this case is being use with the logical operator.
 */
 
-import { Schema, model, models } from "mongoose"
+/*
+other schema properties:
+  trim: true,
+  unique: true
+  minLength: 3,
+  maxLength: 10,
+*/
 
-const listSchema = new Schema({
+import { Schema, model, models, Document, Model } from "mongoose"
+
+interface Ilist extends Document {
+  name: string,
+  deleted: boolean
+}
+
+const listSchema = new Schema<Ilist>({
   name: {
     type: String,
     required: true,
@@ -32,6 +45,6 @@ const listSchema = new Schema({
   },
 })
 
-const List = models.List || model("List", listSchema)
+const List = models.List as Model<Ilist> || model<Ilist>("List", listSchema)
 
 export default List

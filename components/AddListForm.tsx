@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, ChangeEvent, FormEvent } from "react"
 import {
   CardActions,
   Box,
@@ -6,22 +6,33 @@ import {
   Typography,
   TextField,
   IconButton,
-  Card,
 } from "@mui/material"
 import AddIcon from "@mui/icons-material/Add"
 
 // LIST NAMES FORMS
 
-const AddListForm = ({ addNewList }) => {
+// interface ListsNames {
+//   deleted: boolean,
+//   name: string,
+//   _v: number,
+//   _id: string
+// }
+
+interface AddListProps {
+  addNewList: (newItem: ListsNames) => void
+}
+
+const AddListForm = ({ addNewList }: AddListProps) => {
   //Controlled component
   const [listTitle, setListTitle] = useState({ name: "" })
 
-  const handleListTitleChange = (e) => {
+  const handleListTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setListTitle({ name: e.target.value })
   }
+  
 
   //adds a list name with the POST method  (fornt-end)
-  const addList = async (newList) => {
+  const addList = async (newList: {name: string}) => {
     try {
       const res = await fetch("/api/lists/addList", {
         method: "POST",
@@ -40,7 +51,7 @@ const AddListForm = ({ addNewList }) => {
     }
   }
 
-  const handleListSubmit = (e) => {
+  const handleListSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     addList(listTitle) // ---> fetch resquest when list is submmited
     setListTitle({ name: "" })
