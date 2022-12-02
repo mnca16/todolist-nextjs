@@ -2,6 +2,7 @@ import React, {useState, ChangeEvent} from "react"
 import { Stack, Box, Divider} from "@mui/material"
 import AddItemForm from "../../components/AddItemForm"
 import ListItems from "../../components/ListItems"
+import ArrowButton from "../../components/ArrowButton"
 import connectMongo from "../../lib/connectMongo"
 import Items from "../../models/listItems"
 import { ObjectId } from "bson"
@@ -120,7 +121,10 @@ const TodoList: NextPage<TodoListProps> = ({items}) => {
      <Stack
       sx={{ textAlign: "center", marginTop: "4rem"}}
      >
-     <h1 style={{textAlign: "start"}}>{title} ✒️</h1>
+      <Stack spacing={4} direction="row">
+        <ArrowButton/>
+        <h1 style={{textAlign: "start", paddingBottom: "5px"}}>{title} ✒️</h1>
+     </Stack>
      <Divider />
      <AddItemForm addItem={addItem}/>
      </Stack>  
