@@ -1,4 +1,4 @@
-import React, {useState, ChangeEvent} from "react"
+import React, {useState, ChangeEvent, useEffect} from "react"
 import { Stack, Box, Divider} from "@mui/material"
 import AddItemForm from "../../components/AddItemForm"
 import ListItems from "../../components/ListItems"
@@ -11,6 +11,7 @@ import { GetServerSideProps, NextPage} from "next"
 //import { ParsedUrlQuery } from 'node:querystring' 
 import { ParsedUrlQuery } from 'querystring';
 import { Container } from "@mui/material"
+import { Props } from "next/script"
 
 interface TodoListProps {
   items: Items[] //Items interface comes from types.d.ts file
@@ -18,12 +19,16 @@ interface TodoListProps {
 
 //THIS FILE SHOWS THE LIST TITLE AND ITS ITEMS
 const TodoList: NextPage<TodoListProps> = ({items}) => {
+  console.log("items", items)
   //gets the id and list title from useRouter method 
   const router = useRouter()
   const { title, pid } = router.query
  
   const [listItems, setListItems] = useState(items) // --> listItems state
-  const [checked, setChecked] = useState(true)
+  // const [checked, setChecked] = useState(true)
+ //const [checked, setChecked] = useState({})
+  const [inputError, setInputError] = useState("")
+  
 
   /*
   Adds new item and updates the UI
@@ -40,12 +45,25 @@ const TodoList: NextPage<TodoListProps> = ({items}) => {
         },
         body: JSON.stringify(newListItem),
       })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Item title or list-id not found");
+        }
+        return response
+      })
         .then((res) => res.json())
         .then((res) => {
+          console.log("res", res)
           setListItems([...listItems, res.listsItems])
         })
+        .catch((error) => { 
+          //Only network errors get here, fetch API wo
+          console.log("error", error.message)
+          //setInputError(error.response.data.message)
+        })
     } catch (error) {
-      console.log("Fetch request failed", error)
+      let msg = (error as Error).message;
+      console.log("Fetch request failed", msg)
     }
   }
 
@@ -75,7 +93,8 @@ const TodoList: NextPage<TodoListProps> = ({items}) => {
  //Get items function API
   const getItems = async (): Promise<void> => {
       try {
-        await fetch("/api/listItems/getItems")
+        //await fetch(`/api/listItems/getItems/${pid}`)
+        await fetch("/api/listItems/getItems/")
         .then(resp => resp.json())
         .then(res =>
           {
@@ -106,14 +125,17 @@ const TodoList: NextPage<TodoListProps> = ({items}) => {
     }
   }
  
-  const handleChangeCheck = (id: string, e: ChangeEvent<HTMLInputElement>) => {
-    setChecked(e.target.checked)
+  const handleChangeCheck = (id: string, e: ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    //setChecked(e.target.checked)
     //conditional sends requests to update item complete status
     checked ? checkItem(id) : checkItem(id)
   }
 
-  const completedItems = listItems.filter((item) => item.completed === true)
-  const incompletedItems = listItems.filter((item) => item.completed === false)
+
+    const completedItems = listItems.filter((item) => item.completed === true)
+    const incompletedItems = listItems.filter((item) => item.completed === false)
+
+  
   
   return (
     <Container fixed>
@@ -129,6 +151,7 @@ const TodoList: NextPage<TodoListProps> = ({items}) => {
      <AddItemForm addItem={addItem}/>
      </Stack>  
      <ListItems 
+        //checkStatus={checked}
         listItems={incompletedItems} 
         deleteItem={deleteItem} 
         handleChangeCheck={handleChangeCheck}
@@ -139,6 +162,7 @@ const TodoList: NextPage<TodoListProps> = ({items}) => {
       <h1 style={{textAlign: "start"}}>Completed ✔️</h1>
       <Divider />
       <ListItems 
+        //checkStatus={checked}
         listItems={completedItems}
         deleteItem={deleteItem} 
         handleChangeCheck={handleChangeCheck}
@@ -152,16 +176,19 @@ const TodoList: NextPage<TodoListProps> = ({items}) => {
 
 interface Params extends ParsedUrlQuery {
   pid: string
-}
+} 
 
 // interface Params = {
 //   params: {pid: string} 
 // }
 
-// export const getServerSideProps: GetServerSideProps = async ({ params }: Params) => {
+//export const getServerSideProps: GetServerSideProps = async ({ params }: Params) => {
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const { pid } = params as Params;
   console.log("pid from seversideprops", typeof pid)
+// export const getServerSideProps: GetServerSideProps<Props, Params> = async (context) => {
+//   const { pid } = params as Params;
+//   console.log("pid from seversideprops", typeof pid)
   //connect to MONGODB
   await connectMongo()
 

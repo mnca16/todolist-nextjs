@@ -16,7 +16,7 @@ interface ListProps {
 
 
 //LIST NAMES MAIN PAGE
-const Lists = ({ list, deleteList }: ListProps) => {
+const Lists = ({ list, deleteList}: ListProps) => {
   return (
     <Grid
       container

@@ -6,17 +6,17 @@ import { NextApiRequest, NextApiResponse } from "next"
 // NEXT.JS BUILT IN API DELETES LIST TITLES BY ID
 export default async function completedItem(req: NextApiRequest, res: NextApiResponse) {
   const { completeItemID } = req.query // ---> next.js dynamic API request helper
-  console.log("completedItemID", completeItemID)
+  console.log("query: ", completeItemID)
 
   try {
     await connectMongo()
     const listItem = await Items.findById(completeItemID)
-
-    // if (!listItem) {
-    //   res.status(500).json({ message: "There is not item" })
-    //   return
-    // }
-
+    
+    if (!listItem) {
+      res.status(500).json({ message: "There is not item" })
+      return
+    }
+    
     if (listItem!.completed) {
       await Items.findByIdAndUpdate(completeItemID, { completed: false })
     } else {
@@ -26,9 +26,6 @@ export default async function completedItem(req: NextApiRequest, res: NextApiRes
     const completedItemResponse = await Items.findById(completeItemID)
     res.status(200).json({ completedItemResponse })
 
-    if (!completedItem) {
-      return res.json({ message: "there is not list available" })
-    }
   } catch (error) {
     res.status(500).json({ error })
   }

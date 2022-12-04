@@ -44,6 +44,13 @@ const AddItemForm = ({ addItem }: AddItemProps) => {
     >
       <Stack spacing={2} direction="row">
         <TextField
+          // inputProps={{ 
+          //   maxLength: "20",  
+          //   minLength: "3" 
+          // }}
+          // required={true}
+          id="item"
+          type="text"
           value={itemTitle.title}
           label="Add a new task"
           color="secondary"

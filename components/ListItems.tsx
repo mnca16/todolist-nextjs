@@ -5,7 +5,8 @@ import { List } from "@mui/material"
 interface ListItemsProps {
   listItems: Items[],
   deleteItem: (id: string) => void,
-  handleChangeCheck: (id: string, e: ChangeEvent<HTMLInputElement>) => void
+  handleChangeCheck: (id: string, e: ChangeEvent<HTMLInputElement>, checked: boolean) => void,
+  //checkStatus: boolean
 }
 
 const ListItems = ({ listItems, deleteItem, handleChangeCheck }: ListItemsProps) => {
@@ -25,6 +26,7 @@ const ListItems = ({ listItems, deleteItem, handleChangeCheck }: ListItemsProps)
             item={item}
             deleteItem={deleteItem}
             handleChangeCheck={handleChangeCheck}
+           // checkStatus={checkStatus}
           />
         )
       })}

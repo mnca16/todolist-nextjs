@@ -50,6 +50,12 @@ const AddListForm = ({ addNewList }: AddListProps) => {
             color="secondary"
             name="listTitle"
             onChange={handleListTitleChange}
+            inputProps={{ 
+              maxLength: "20",  
+              minLength: "3", 
+            }}
+            required={true}
+            id="list"
           />
           <IconButton type="submit">
             <AddIcon fontSize="large" />
