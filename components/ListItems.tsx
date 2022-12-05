@@ -2,19 +2,11 @@ import React, {ChangeEvent} from "react"
 import Item from "./Item"
 import { List } from "@mui/material" 
 
-// interface Items {
-//   completed: boolean,
-//   deleted: boolean,
-//   listId: string,
-//   title: string,
-//   _v: number,
-//   _id: string
-// }
-
 interface ListItemsProps {
   listItems: Items[],
   deleteItem: (id: string) => void,
-  handleChangeCheck: (id: string, e: ChangeEvent<HTMLInputElement>) => void
+  handleChangeCheck: (id: string, checked: boolean) => void,
+  //checkStatus: boolean
 }
 
 const ListItems = ({ listItems, deleteItem, handleChangeCheck }: ListItemsProps) => {

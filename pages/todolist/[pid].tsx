@@ -1,46 +1,71 @@
-import React, {useState, ChangeEvent} from "react"
+import React, {useState, ChangeEvent, useEffect} from "react"
 import { Stack, Box, Divider} from "@mui/material"
 import AddItemForm from "../../components/AddItemForm"
 import ListItems from "../../components/ListItems"
+import ArrowButton from "../../components/ArrowButton"
 import connectMongo from "../../lib/connectMongo"
 import Items from "../../models/listItems"
 import { ObjectId } from "bson"
 import { useRouter } from "next/router"
-import { GetServerSideProps, NextPage, GetServerSidePropsContext} from "next"
-//import { ParsedUrlQuery } from 'node:querystring'
+import { GetServerSideProps, NextPage} from "next"
+//import { ParsedUrlQuery } from 'node:querystring' 
 import { ParsedUrlQuery } from 'querystring';
-
-// interface Items {
-//   completed: boolean,
-//   deleted: boolean,
-//   listId: string,
-//   title: string,
-//   _v: number,
-//   _id: string
-// }
+import { Container } from "@mui/material"
 
 interface TodoListProps {
-  items: Items[]
+  items: Items[] //Items interface comes from types.d.ts file
 }
-
 
 //THIS FILE SHOWS THE LIST TITLE AND ITS ITEMS
 const TodoList: NextPage<TodoListProps> = ({items}) => {
+  console.log("items", items)
   //gets the id and list title from useRouter method 
   const router = useRouter()
   const { title, pid } = router.query
  
   const [listItems, setListItems] = useState(items) // --> listItems state
-  const [checked, setChecked] = useState(true)
+  const [inputError, setInputError] = useState("")
   
-  //Adds new item and updates the UI
-  //Used Item interface
-  const addItem = (newItem: Items) => {  
-     setListItems([...listItems, newItem])    
+
+  /*
+  Adds new item and updates the UI
+  adds a list item title with the POST method  (the fornt-end)
+  AddListName comes from types.d.ts file and represents the data we're sending to the db
+  */
+  const addItem = async (newListItem: AddListName): Promise<void> => {
+    try {
+      await fetch("/api/listItems/addItem", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newListItem),
+      })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Item title or list-id not found");
+        }
+        return response
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log("res", res)
+          setListItems([...listItems, res.listsItems])
+        })
+        .catch((error) => { 
+          //Only network errors get here, fetch API wo
+          console.log("error", error.message)
+          //setInputError(error.response.data.message)
+        })
+    } catch (error) {
+      let msg = (error as Error).message;
+      console.log("Fetch request failed", msg)
+    }
   }
 
   //Soft deletes the seletec item and updates the UI with the api response 
-  const deleteItem = async (id: string) => {
+  const deleteItem = async (id: string): Promise<void> => {
     try {
        await fetch(`/api/listItems/deleteItem/${id}`, {
         method: "PATCH",
@@ -63,9 +88,10 @@ const TodoList: NextPage<TodoListProps> = ({items}) => {
   }
 
  //Get items function API
-  const getItems = async () => {
+  const getItems = async (): Promise<void> => {
       try {
-        await fetch("/api/listItems/getItems")
+        //await fetch(`/api/listItems/getItems/${pid}`)
+        await fetch("/api/listItems/getItems/")
         .then(resp => resp.json())
         .then(res =>
           {
@@ -78,7 +104,7 @@ const TodoList: NextPage<TodoListProps> = ({items}) => {
   }  
   
   //Updates completed item
-  const checkItem = async (id: string) => {
+  const checkItem = async (id: string): Promise<void> => {
     try {
       await fetch(`/api/listItems/completeItem/${id}`, {
         method: "PATCH",
@@ -96,21 +122,27 @@ const TodoList: NextPage<TodoListProps> = ({items}) => {
     }
   }
  
-  const handleChangeCheck = (id: string, e: ChangeEvent<HTMLInputElement>) => {
-    setChecked(e.target.checked)
+  const handleChangeCheck = (id: string, checked: boolean) => {
     //conditional sends requests to update item complete status
     checked ? checkItem(id) : checkItem(id)
   }
 
-  const completedItems = listItems.filter((item) => item.completed === true)
-  const incompletedItems = listItems.filter((item) => item.completed === false)
+
+    const completedItems = listItems.filter((item) => item.completed === true)
+    const incompletedItems = listItems.filter((item) => item.completed === false)
+
+  
   
   return (
+    <Container fixed>
     <Box sx={{margin: "auto", width: "60%", padding: "10px"}}>
      <Stack
       sx={{ textAlign: "center", marginTop: "4rem"}}
      >
-     <h1 style={{textAlign: "start"}}>{title} ✒️</h1>
+      <Stack spacing={4} direction="row">
+        <ArrowButton/>
+        <h1 style={{textAlign: "start", paddingBottom: "5px"}}>{title} ✒️</h1>
+     </Stack>
      <Divider />
      <AddItemForm addItem={addItem}/>
      </Stack>  
@@ -131,22 +163,17 @@ const TodoList: NextPage<TodoListProps> = ({items}) => {
         />
      </Stack>
     </Box>  
+    </Container>
   )
 }
 
 
 interface Params extends ParsedUrlQuery {
   pid: string
-}
+} 
 
-// interface Params = {
-//   params: {pid: string} 
-// }
-
-// export const getServerSideProps: GetServerSideProps = async ({ params }: Params) => {
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const { pid } = params as Params;
-  console.log("pid from seversideprops", typeof pid)
   //connect to MONGODB
   await connectMongo()
 
@@ -172,68 +199,5 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// export async function getServerSideProps({ params }) {
-//   console.log("params typeof", typeof params.pid)
-//   //connect to MONGODB
-//   await connectMongo()
-
-//   try {
-//     const itemsSchemaResult = await Items.find({ listId: ObjectId(params.pid), deleted: false})// --> gets the right schema with the ObjectId List
-//     const items = itemsSchemaResult.map((doc) => {
-//       const item = doc.toObject()
-//       item._id = item._id.toString()
-//       item.listId = item.listId.toString()
-//       return item
-//     })
-   
-//     return {
-//       props: { 
-//         items: items,
-//        }
-//     }
-
-//   } catch (error) {
-//     console.log(error)
-//     return {
-//       notFound: true,
-//     }
-//   }
-// }
-
-/*
-Links for ObjectID:
-https://github.com/Automattic/mongoose/issues/10960
-https://stackoverflow.com/questions/69863210/upgrade-mongoose-from-5-to-6-value-of-type-typeof-objectid-is-not-callable-di
-https://stackoverflow.com/questions/38939507/error-ts2348-value-of-type-typeof-objectid-is-not-callable-did-you-mean-to-i
-
-Links for params (on GetServerSideProps params) error:
-https://github.com/vercel/next.js/discussions/16522
-https://github.com/vercel/next.js/issues/11033
-https://nextjs.org/docs/api-reference/data-fetching/get-server-side-props
-
-
-Links for Params ServerSideError Property 'pid' does not exist on type 'ParsedUrlQuery | undefined'
-https://wallis.dev/blog/nextjs-getstaticprops-and-getstaticpaths-with-typescript
-https://github.com/vercel/next.js/discussions/16522
-https://www.google.com/search?q=const+getServerSideProps%3A+GetServerSideProps%3C%7B+%5Bkey%3A+string%5D%3A+any%3B+%7D%2C+ParsedUrlQuery%2C+PreviewData%3E&rlz=1C1CHBF_enUS862US863&oq=const+getServerSideProps%3A+GetServerSideProps%3C%7B+%5Bkey%3A+string%5D%3A+any%3B+%7D%2C+ParsedUrlQuery%2C+PreviewData%3E&aqs=chrome..69i57.585j0j7&sourceid=chrome&ie=UTF-8
-https://nextjs.org/docs/api-reference/data-fetching/get-server-side-props
-*/
-
 
 export default TodoList

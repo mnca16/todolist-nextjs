@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from "react"
+import React, {ChangeEvent, useState} from "react"
 import {
   ListItem,
   Checkbox,
@@ -8,22 +8,20 @@ import {
 } from "@mui/material"
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation"
 
-// interface Items {
-//   completed: boolean,
-//   deleted: boolean,
-//   listId: string,
-//   title: string,
-//   _v: number,
-//   _id: string
-// }
-
 interface Props {
   item: Items, 
   deleteItem: (id: string) => void,
-  handleChangeCheck: (id: string, e: ChangeEvent<HTMLInputElement>) => void
+  handleChangeCheck: (id: string, checked: boolean) => void,
 }
 
-const Item = ({ item, deleteItem, handleChangeCheck }: Props) => {
+const Item = ({ item, deleteItem, handleChangeCheck}: Props) => {
+  const [checked, setChecked] = useState({complete: item.completed})
+  
+  const handleChange = () => {
+  setChecked({complete: !item.completed})
+  handleChangeCheck(item._id, !item.completed)
+  }
+
   return (
     <ListItem
       secondaryAction={
@@ -40,11 +38,11 @@ const Item = ({ item, deleteItem, handleChangeCheck }: Props) => {
     >
       <ListItemIcon>
         <Checkbox
+          checked={checked.complete}
           color="secondary"
           edge="start"
-          onChange={(e) => {
-            handleChangeCheck(item._id, e)
-          }}
+          onChange={handleChange}
+          inputProps={{"aria-label": "controlled" }}
         />
       </ListItemIcon>
       <ListItemText primary={item.title} />
