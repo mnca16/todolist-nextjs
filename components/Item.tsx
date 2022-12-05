@@ -11,16 +11,15 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation"
 interface Props {
   item: Items, 
   deleteItem: (id: string) => void,
-  handleChangeCheck: (id: string, e: ChangeEvent<HTMLInputElement>, checked: boolean) => void,
-  //checkStatus: boolean
+  handleChangeCheck: (id: string, checked: boolean) => void,
 }
 
 const Item = ({ item, deleteItem, handleChangeCheck}: Props) => {
   const [checked, setChecked] = useState({complete: item.completed})
   
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = () => {
   setChecked({complete: !item.completed})
-  handleChangeCheck(item._id, e, !item.completed)
+  handleChangeCheck(item._id, !item.completed)
   }
 
   return (
@@ -42,9 +41,6 @@ const Item = ({ item, deleteItem, handleChangeCheck}: Props) => {
           checked={checked.complete}
           color="secondary"
           edge="start"
-          // onChange={(e) => {
-          //   handleChangeCheck(item._id, e, checked)
-          // }}
           onChange={handleChange}
           inputProps={{"aria-label": "controlled" }}
         />

@@ -11,7 +11,6 @@ import { GetServerSideProps, NextPage} from "next"
 //import { ParsedUrlQuery } from 'node:querystring' 
 import { ParsedUrlQuery } from 'querystring';
 import { Container } from "@mui/material"
-import { Props } from "next/script"
 
 interface TodoListProps {
   items: Items[] //Items interface comes from types.d.ts file
@@ -25,8 +24,6 @@ const TodoList: NextPage<TodoListProps> = ({items}) => {
   const { title, pid } = router.query
  
   const [listItems, setListItems] = useState(items) // --> listItems state
-  // const [checked, setChecked] = useState(true)
- //const [checked, setChecked] = useState({})
   const [inputError, setInputError] = useState("")
   
 
@@ -125,8 +122,7 @@ const TodoList: NextPage<TodoListProps> = ({items}) => {
     }
   }
  
-  const handleChangeCheck = (id: string, e: ChangeEvent<HTMLInputElement>, checked: boolean) => {
-    //setChecked(e.target.checked)
+  const handleChangeCheck = (id: string, checked: boolean) => {
     //conditional sends requests to update item complete status
     checked ? checkItem(id) : checkItem(id)
   }
@@ -151,7 +147,6 @@ const TodoList: NextPage<TodoListProps> = ({items}) => {
      <AddItemForm addItem={addItem}/>
      </Stack>  
      <ListItems 
-        //checkStatus={checked}
         listItems={incompletedItems} 
         deleteItem={deleteItem} 
         handleChangeCheck={handleChangeCheck}
@@ -162,7 +157,6 @@ const TodoList: NextPage<TodoListProps> = ({items}) => {
       <h1 style={{textAlign: "start"}}>Completed ✔️</h1>
       <Divider />
       <ListItems 
-        //checkStatus={checked}
         listItems={completedItems}
         deleteItem={deleteItem} 
         handleChangeCheck={handleChangeCheck}
@@ -178,17 +172,8 @@ interface Params extends ParsedUrlQuery {
   pid: string
 } 
 
-// interface Params = {
-//   params: {pid: string} 
-// }
-
-//export const getServerSideProps: GetServerSideProps = async ({ params }: Params) => {
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const { pid } = params as Params;
-  console.log("pid from seversideprops", typeof pid)
-// export const getServerSideProps: GetServerSideProps<Props, Params> = async (context) => {
-//   const { pid } = params as Params;
-//   console.log("pid from seversideprops", typeof pid)
   //connect to MONGODB
   await connectMongo()
 
