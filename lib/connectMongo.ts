@@ -6,7 +6,7 @@ const connectMongo = async () => {
   if (mongoUri === "") {
     throw new Error('enviroment variable undefined')
   }
-  mongoose.connect(mongoUri).catch((err) => {console.log(err)})
+  mongoose.connect(mongoUri).catch((err) => {console.log("DB connect error",err)})
 }
 
 export default connectMongo
