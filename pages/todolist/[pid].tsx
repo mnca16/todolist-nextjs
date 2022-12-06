@@ -18,7 +18,6 @@ interface TodoListProps {
 
 //THIS FILE SHOWS THE LIST TITLE AND ITS ITEMS
 const TodoList: NextPage<TodoListProps> = ({items}) => {
-  console.log("items", items)
   //gets the id and list title from useRouter method 
   const router = useRouter()
   const { title, pid } = router.query
@@ -167,12 +166,19 @@ const TodoList: NextPage<TodoListProps> = ({items}) => {
   )
 }
 
+type Props = {
+  props: {
+    items: Items[]
+  }
+  // notFound?: boolean
+}
+
 
 interface Params extends ParsedUrlQuery {
   pid: string
 } 
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }): Promise<Props>=> {
   const { pid } = params as Params;
   //connect to MONGODB
   await connectMongo()
@@ -180,8 +186,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   try {
     const itemsSchemaResult = await Items.find({ listId: new ObjectId(pid), deleted: false})// --> gets the right schema with the ObjectId List
     const items = itemsSchemaResult.map((doc) => {
-      const item = doc.toObject()
-      item._id = item._id?.toString()
+      const item = doc.toObject<Items>() //The schema is converted to an object so id becamos unknown, I use the Item interface but I can also use an asertion
+      item._id = item._id.toString()
       item.listId = item.listId.toString()
       return item
     })
@@ -194,9 +200,10 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
   } catch (error) {
     console.log(error)
-    return {
-      notFound: true,
-    }
+    throw error
+    // return {
+    //   notFound: true,
+    // }
   }
 }
 

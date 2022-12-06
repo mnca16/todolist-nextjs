@@ -79,7 +79,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
     const listsName = listSchemaResult.map((doc) => {
       //converts the mongoose document to js object
       const list = doc.toObject()
-      list._id = list._id?.toString()
+      list._id = list._id!.toString()
       return list
     })
     return {
