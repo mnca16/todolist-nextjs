@@ -1,17 +1,17 @@
 interface ListsNames {
+    _id: string 
     deleted: boolean,
     name: string,
     _v: number,
-    _id: string
 }
 
 interface Items {
+  _id: string,
+  listId: string,
   completed: boolean,
   deleted: boolean,
-  listId: string,
   title: string,
   _v: number,
-  _id: string
 }
 
 interface AddListName {
