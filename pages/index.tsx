@@ -14,7 +14,9 @@ interface HomePageProps {
 }
 
 const HomePage: NextPage<HomePageProps> = ({ listsName }) => {
+
   const [list, setList] = useState(listsName)
+  const [inputError, setInputError] = useState("")
 
     //adds a list name with the POST method  (fornt-end)
     const addNewList = async (newList: {name: string}): Promise<void> => {
@@ -26,9 +28,16 @@ const HomePage: NextPage<HomePageProps> = ({ listsName }) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(newList),
-        })
+        }) 
+          .then((response) => {
+           if (!response.ok) {
+             throw new Error("List title not found");
+           }
+          return response
+          })
           .then((res) => res.json())
           .then((res) => {
+            console.log("list", res)
             setList([...list, res.lists])
           })
       } catch (error) {
