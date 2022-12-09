@@ -11,7 +11,7 @@ const listSchema = new Schema<Ilist>({
     required: true,
     trim: true,
     minLength: 3,
-    maxLength: 10,
+    maxLength: 50,
   },
   deleted: {
     type: Boolean,

@@ -10,7 +10,7 @@ const ArrowButton = () => {
          href={{
              pathname: `/`,
             }}>
-            <Button variant="contained" color="secondary">
+            <Button data-testid="btn" variant="contained" color="secondary">
                 <ArrowBackIcon/>
             </Button>
         </Link>

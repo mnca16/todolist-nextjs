@@ -52,7 +52,6 @@ const Lists = ({ list, deleteList}: ListProps) => {
                   <CancelPresentationIcon />
                 </IconButton>
               <CardActionArea>
-                {/* <h1 style={{ margin: "50px" }}> */}
                   <Link
                     href={{
                       pathname: `/todolist/${list._id}`,
@@ -63,7 +62,6 @@ const Lists = ({ list, deleteList}: ListProps) => {
                     {list.name}
                     </Typography>
                   </Link>
-                {/* </h1> */}
               </CardActionArea>
             </CardContent>
           </Grid>
