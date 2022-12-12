@@ -10,7 +10,7 @@ const baseURL = `http://localhost:${PORT}`
 
 // Reference: https://playwright.dev/docs/test-configuration
 const config: PlaywrightTestConfig = {
-  fullyParallel: true,
+ // fullyParallel: true,
 
   // Timeout per test
   timeout: 30 * 1000,
@@ -47,40 +47,40 @@ const config: PlaywrightTestConfig = {
   },
 
   projects: [
-    {
-      name: "chromium",
-      testMatch: /tests\/(api)\/.*(test|spec)\.(js|ts|mjs)/,
-      use: {
-        ...devices["Desktop Chrome"],
-      },
-    },
-    {
-      name: "chromium",
-      testMatch: /tests\/(e2e)\/.*(test|spec)\.(js|ts|mjs)/,
-      use: {
-        ...devices["Desktop Chrome"],
-      },
-    },
-    {
-      name: "firefox",
-      testMatch: /tests\/(e2e)\/.*(test|spec)\.(js|ts|mjs)/,
-      use: {
-        ...devices["Desktop Firefox"],
-      },
-    },
+    // {
+    //   name: "chromium",
+    //   testMatch: /tests\/(api)\/.*(test|spec)\.(js|ts|mjs)/,
+    //   use: {
+    //     ...devices["Desktop Chrome"],
+    //   },
+    // },
+    // {
+    //   name: "chromium",
+    //   testMatch: /tests\/(e2e)\/.*(test|spec)\.(js|ts|mjs)/,
+    //   use: {
+    //     ...devices["Desktop Chrome"],
+    //   },
+    // },
+    // {
+    //   name: "firefox",
+    //   testMatch: /tests\/(e2e)\/.*(test|spec)\.(js|ts|mjs)/,
+    //   use: {
+    //     ...devices["Desktop Firefox"],
+    //   },
+    // },
     ///before Vini's sugestion
-    /// {
-    ///  name: 'Desktop Chrome',
-    ///   use: {
-    ///     ...devices['Desktop Chrome'],
-    ///  },
-    /// },
-    /// {
-    ///   name: 'Desktop Firefox',
-    ///   use: {
-    ///     ...devices['Desktop Firefox'],
-    ///   },
-    /// },
+     {
+      name: 'Desktop Chrome',
+       use: {
+         ...devices['Desktop Chrome'],
+      },
+     },
+    //  {
+    //    name: 'Desktop Firefox',
+    //    use: {
+    //      ...devices['Desktop Firefox'],
+    //   },
+    //  },
     // {
     //   name: 'Desktop Safari',
     //   use: {
