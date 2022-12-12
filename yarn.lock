@@ -1515,6 +1515,14 @@
     "@nodelib/fs.scandir" "2.1.5"
     "fastq" "^1.6.0"
 
+"@playwright/test@^1.28.1":
+  "integrity" "sha512-xN6spdqrNlwSn9KabIhqfZR7IWjPpFK1835tFNgjrlysaSezuX8PYUwaz38V/yI8TJLG9PkAMEXoHRXYXlpTPQ=="
+  "resolved" "https://registry.npmjs.org/@playwright/test/-/test-1.28.1.tgz"
+  "version" "1.28.1"
+  dependencies:
+    "@types/node" "*"
+    "playwright-core" "1.28.1"
+
 "@popperjs/core@^2.11.6":
   "integrity" "sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw=="
   "resolved" "https://registry.npmjs.org/@popperjs/core/-/core-2.11.6.tgz"
@@ -4703,6 +4711,11 @@
   "version" "4.2.0"
   dependencies:
     "find-up" "^4.0.0"
+
+"playwright-core@1.28.1":
+  "integrity" "sha512-3PixLnGPno0E8rSBJjtwqTwJe3Yw72QwBBBxNoukIj3lEeBNXwbNiKrNuB1oyQgTBw5QHUhNO3SteEtHaMK6ag=="
+  "resolved" "https://registry.npmjs.org/playwright-core/-/playwright-core-1.28.1.tgz"
+  "version" "1.28.1"
 
 "postcss@8.4.14":
   "integrity" "sha512-E398TUmfAYFPBSdzgeieK2Y1+1cpdxJx8yXbK/m57nRhKSmk1GB2tO4lbLBtlkfPQTDKfe4Xqv1ASWPpayPEig=="
