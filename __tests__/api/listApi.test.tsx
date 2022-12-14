@@ -1,26 +1,10 @@
 /**
  * @jest-environment node
  */
-import { createMocks, RequestMethod } from 'node-mocks-http';
-import { MongoClient, ObjectId } from 'mongodb';
-import { MongoMemoryServer } from 'mongodb-memory-server';
+import { createMocks} from 'node-mocks-http';
+import { memoryServerConnect, memoryServerStop } from '../../lib/connectMemoryServer';
 import addList from "../../pages/api/lists/addList";
 import deleteList from "../../pages/api/lists/[deleteListID]"
-import mongoose from 'mongoose';
-
-let mongoServer: MongoMemoryServer
-let uri
-
-export const memoryServerConnect = async () => {
-  mongoServer = await MongoMemoryServer.create();
-  uri =  mongoServer.getUri();
-  process.env.MONGO_URI = uri
-  await mongoose.connect(uri);
-}
-
-export const memoryServerStop = async () => {
-  await mongoServer.stop()
-}
 
 
 beforeAll(async () => {
@@ -43,8 +27,11 @@ describe("Lists API test addList handler", () => {
         name: 'Groceries' 
       } 
     });
+
     //use handler 
     await addList(req, res);
+
+    //Expect assertions
     expect(res._getStatusCode()).toBe(200)
     expect(JSON.parse(res._getData()).lists).toEqual(
       expect.objectContaining(
@@ -78,7 +65,7 @@ describe("Lists API test addList handler", () => {
 
 describe("Lists API test deleteList handler", () => {
     
-  test.only("api returns response 200 and deleted list object", async () => {
+  test("api returns response 200 and deleted list object", async () => {
         
     const { req, res } = createMocks({
       method: "PATCH",
@@ -107,7 +94,7 @@ describe("Lists API test deleteList handler", () => {
     )
   })
 
-  test.only("api returns response 500 and error message", async () => {
+  test("api returns response 500 and error message", async () => {
         
     const { req, res } = createMocks({
       method: "PATCH",

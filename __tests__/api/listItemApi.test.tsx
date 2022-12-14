@@ -2,21 +2,21 @@
  * @jest-environment node
  */
 import { createMocks } from 'node-mocks-http';
-// import { MongoClient, ObjectId } from 'mongodb';
-import { MongoMemoryServer } from 'mongodb-memory-server';
+import { memoryServerConnect, memoryServerStop } from '../../lib/connectMemoryServer';
 import addItem from "../../pages/api/listItems/addItem";
 import getItems from "../../pages/api/listItems/getItems"
 import deleteItem from "../../pages/api/listItems/deleteItem/[deleteItemID]"
 import completeItem from "../../pages/api/listItems/completeItem/[completeItemID]"
-import mongoose from 'mongoose';
 
-let mongoServer: MongoMemoryServer;
+//let mongoServer: MongoMemoryServer;
 
 beforeAll(async () => {
-  mongoServer = await MongoMemoryServer.create();
-  const uri =  mongoServer.getUri();
-  await mongoose.connect(uri);  
+  await memoryServerConnect()
 });
+
+afterAll(async () => {
+  await memoryServerStop()
+})
 
 
 describe('ListItems API addItem handler', () => {
