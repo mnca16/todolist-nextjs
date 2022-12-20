@@ -1,10 +1,9 @@
 import mongoose from "mongoose"
 
-
-const mongoUri: string = process.env.MONGO_URI || ""
-
 const connectMongo = async () => {
-  if (mongoUri === "") {
+  const mongoUri: string | undefined = process.env.MONGO_URI 
+
+  if (!mongoUri) {
     throw new Error('enviroment variable undefined')
   }
 
@@ -12,11 +11,3 @@ const connectMongo = async () => {
 }
 
 export default connectMongo
-
-/*
-Second params for connect method (recomendation from mongodb):
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true,
-*/

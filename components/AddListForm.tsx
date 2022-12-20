@@ -56,7 +56,7 @@ const AddListForm = ({ addNewList }: AddListProps) => {
             required={true}
             id="list"
           />
-          <IconButton type="submit">
+          <IconButton id="submit-list" type="submit">
             <AddIcon fontSize="large" />
           </IconButton>
         </form>
