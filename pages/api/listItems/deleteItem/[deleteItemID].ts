@@ -22,6 +22,6 @@ export default async function deleteItem(req: NextApiRequest, res: NextApiRespon
     }
 
   } catch (error) {
-    res.status(500).json({ error })
+    res.status(500).json({ message: "Item not found" })
   }
 }

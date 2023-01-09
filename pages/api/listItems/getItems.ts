@@ -9,6 +9,12 @@ export default async function getItems(req: NextApiRequest, res: NextApiResponse
   try {
     await connectMongo()
     const lists = await Items.find({}) // ---> mongoose read method (reads all the data)
+    
+    if(!lists) {
+      console.log("Items not found")
+      return res.status(500).json({message: "Items not found"})
+    }
+    
     res.status(200).json({ lists })
   } catch (error) {
     res.status(500).json({ error })
@@ -17,3 +23,7 @@ export default async function getItems(req: NextApiRequest, res: NextApiResponse
 
 //Make this a Dynamic route and received the List id 
 //Add and if statement in case the list is not found
+
+
+//New plan for api:
+//Send the id and filter item?

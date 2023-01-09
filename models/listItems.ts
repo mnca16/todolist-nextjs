@@ -21,7 +21,8 @@ const itemSchema = new Schema<Iitem>({
     required: true,
     trim: true,
     minLength: 3,
-    maxLength: 50,
+    maxLength: 300
+    ,
   },
   completed: {
     type: Boolean,

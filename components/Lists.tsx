@@ -43,6 +43,7 @@ const Lists = ({ list, deleteList}: ListProps) => {
           >
             <CardContent>
                 <IconButton
+                  aria-label="delete-list"
                   sx={{ margin: "1rem 0 0 13rem" }}
                   size="small"
                   onClick={() => {

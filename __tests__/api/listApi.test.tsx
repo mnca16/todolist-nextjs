@@ -3,6 +3,7 @@
  */
 import { createMocks} from 'node-mocks-http';
 import { memoryServerConnect, memoryServerStop } from '../../lib/connectMemoryServer';
+var httpMocks = require("node-mocks-http")
 import addList from "../../pages/api/lists/addList";
 import deleteList from "../../pages/api/lists/[deleteListID]"
 
@@ -27,7 +28,7 @@ describe("Lists API test addList handler", () => {
         name: 'Groceries' 
       } 
     });
-
+    
     //use handler 
     await addList(req, res);
 
@@ -66,30 +67,43 @@ describe("Lists API test addList handler", () => {
 describe("Lists API test deleteList handler", () => {
     
   test("api returns response 200 and deleted list object", async () => {
-        
-    const { req, res } = createMocks({
-      method: "PATCH",
-      body: { 
-        deleted: true,
-      },
-      query: {
-        deleteListID: "6398ec5a91e9601999b8cf06"
-      }
-    });
+    //creates list   
+    const req_1 = httpMocks.createRequest({
+      method: "POST",
+      body: {name: "Work"}
+    })
 
-    await deleteList(req, res);
+    const res_1 = httpMocks.createResponse()
+    await addList(req_1, res_1)
+
+    //stores list's id and list object
+    console.log("response", res_1)
+    let listId = JSON.parse(res_1._getData()).lists._id
+    console.log("response list id", listId)
+    let listObject = JSON.parse(res_1._getData()).lists
+    console.log("response list object", listObject)
+    
+
+    //Soft delete list
+    const req_2 = httpMocks.createRequest({
+      method: "PATCH",
+      body: {deleted: true},
+      query: {deleteListID: listId}
+    })
+
+    const res_2 = httpMocks.createResponse()
+
+
+    await deleteList(req_2, res_2);
         
-    expect(res._getStatusCode()).toBe(200)
-    expect(JSON.parse(res._getData()).deletedList).toEqual(
+    expect(res_2._getStatusCode()).toBe(200)
+    expect(JSON.parse(res_2._getData()).deletedList).toEqual(
      expect.objectContaining(
-       {
-        //  "deletedList" : {
-           "deleted": true,
-           "name": "List 4",
-           "_v": 0,
-           "_id": '6398ec5a91e9601999b8cf06' 
-         // }
-       }
+      {
+        "__v": 0,
+        "deleted": true,
+        "name": "Work",
+      }
       )
     )
   })
