@@ -11,11 +11,3 @@ const connectMongo = async () => {
 }
 
 export default connectMongo
-
-/*
-Second params for connect method (recomendation from mongodb):
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true,
-*/

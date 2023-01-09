@@ -17,6 +17,12 @@ const customJestConfig = {
   testEnvironment: "jest-environment-jsdom",
   preset: "@shelf/jest-mongodb",
 
+  testPathIgnorePatterns: [
+    "<rootDir>/.next/",
+    "<rootDir>/node_modules/",
+    "<rootDir>/tests/",
+  ],
+
   // global.TextEncoder = TextEncoder;
   // global.TextDecoder = TextDecoder;
   // globals: {

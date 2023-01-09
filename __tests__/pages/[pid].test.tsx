@@ -8,9 +8,9 @@ import { memoryServerConnect, memoryServerStop } from "../../lib/connectMemorySe
 
 describe("Tests HomePage and GetServerSideProps function", () => {
     it("Should return proper props from GetServerSideProps function", async () => {
-      // await memoryServerConnect()
-      // const props = await getServerSideProps()
-      // console.log("getServerSideProps", props)
-      // await memoryServerStop()
+      await memoryServerConnect()
+      const props = await getServerSideProps()
+      console.log("getServerSideProps", props)
+      await memoryServerStop()
     })
   })

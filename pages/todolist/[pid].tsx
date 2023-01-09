@@ -8,7 +8,6 @@ import Items from "../../models/listItems"
 import { ObjectId } from "bson"
 import { useRouter } from "next/router"
 import { GetServerSideProps, NextPage} from "next"
-//import { ParsedUrlQuery } from 'node:querystring' 
 import { ParsedUrlQuery } from 'querystring';
 import { Container } from "@mui/material"
 
@@ -53,7 +52,7 @@ const TodoList: NextPage<TodoListProps> = ({items}) => {
           setListItems([...listItems, res.listsItems])
         })
         .catch((error) => { 
-          //Only network errors get here, fetch API wo
+          //Only network errors get here, fetch API 
           console.log("error", error.message)
           //setInputError(error.response.data.message)
         })

@@ -31,6 +31,8 @@ const config: PlaywrightTestConfig = {
     reuseExistingServer: !process.env.CI,
   },
 
+  reporter: 'html',
+
   use: {
     // Use baseURL so to make navigations relative.
     // More information: https://playwright.dev/docs/api/class-testoptions#test-options-base-url

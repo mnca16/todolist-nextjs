@@ -59,7 +59,7 @@ const Lists = ({ list, deleteList}: ListProps) => {
                       query: { title: list.name },
                     }}
                   >
-                    <Typography variant="h4" sx={{ margin:"10px 0 1rem 0", textAlign: "center" }}>
+                    <Typography variant="h4" sx={{ margin:"10px 0 1rem 0", textAlign: "center" }} id="list-name">
                     {list.name}
                     </Typography>
                   </Link>
