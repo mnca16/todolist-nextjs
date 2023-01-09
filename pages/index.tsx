@@ -14,6 +14,7 @@ interface HomePageProps {
 }
 
 const HomePage: NextPage<HomePageProps> = ({ listsName }) => {
+  console.log("props - HomePage", listsName)
 
   const [list, setList] = useState(listsName)
   const [inputError, setInputError] = useState("")
@@ -47,7 +48,7 @@ const HomePage: NextPage<HomePageProps> = ({ listsName }) => {
 
   const deleteList = async (id: string): Promise<void> => {
     try {
-      await fetch(`/api/lists/${id}`, {
+      await fetch(`/api/lists/${id}`, { 
         method: "PATCH",
         headers: {
           Accept: "application/json",
@@ -57,6 +58,7 @@ const HomePage: NextPage<HomePageProps> = ({ listsName }) => {
       })
         .then((res) => res.json())
         .then((res) => {
+          console.log("res", res)
           const deletedList = list.filter(
             (item) => item._id !== res.deletedList._id
           )
@@ -82,20 +84,23 @@ const HomePage: NextPage<HomePageProps> = ({ listsName }) => {
 
 //Get list names from mongo using ServerSide props which would render the first time
 export const getServerSideProps: GetServerSideProps = async () => {
-  await connectMongo() // ---> connects to mongo
   try {
+    await connectMongo() // ---> connects to mongo
+    console.log("Fetching data")
     const listSchemaResult = await List.find({ deleted: false }) // ---> grabs the schema with the and uses mongoose get(find) method (CRUD)
+    console.log("finds schema", listSchemaResult)
     const listsName = listSchemaResult.map((doc) => {
       //converts the mongoose document to js object
       const list = doc.toObject()
       list._id = list._id!.toString()
       return list
     })
+    console.log("listsName", listsName)
     return {
       props: { listsName: listsName },
     }
   } catch (error) {
-    console.log(error)
+    //console.log(error)
     return {
       notFound: true,
     }

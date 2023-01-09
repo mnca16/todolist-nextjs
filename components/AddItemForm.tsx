@@ -44,11 +44,11 @@ const AddItemForm = ({ addItem }: AddItemProps) => {
     >
       <Stack spacing={2} direction="row">
         <TextField
-          // inputProps={{ 
-          //   maxLength: "50",  
-          //   minLength: "3" 
-          // }}
-          // required={true}
+          inputProps={{ 
+            maxLength: "50",  
+            minLength: "3" 
+          }}
+          required={true}
           id="item"
           type="text"
           value={itemTitle.title}

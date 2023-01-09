@@ -77,6 +77,7 @@ const TodoList: NextPage<TodoListProps> = ({items}) => {
       })
       .then((res) => res.json())
       .then((res) => {
+        console.log("deleten item res", res)
         const deletedItem = listItems.filter((item) => 
         item._id !== res.deletedItem._id)
         setListItems(deletedItem)
@@ -94,6 +95,7 @@ const TodoList: NextPage<TodoListProps> = ({items}) => {
         .then(resp => resp.json())
         .then(res =>
           {
+          console.log("response getItems", res)
           const currentItems = res.lists.filter((item: Items) => 
             item.listId === pid && item.deleted === false)
           setListItems(currentItems)})
@@ -113,7 +115,8 @@ const TodoList: NextPage<TodoListProps> = ({items}) => {
         },
       })
       .then(resp => resp.json())
-      .then(res => { 
+      .then(res => {
+        console.log("res checkItem", res) 
         getItems()
       })
     } catch (error) {

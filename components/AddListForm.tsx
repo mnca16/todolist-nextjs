@@ -56,8 +56,8 @@ const AddListForm = ({ addNewList }: AddListProps) => {
             required={true}
             id="list"
           />
-          <IconButton type="submit">
-            <AddIcon fontSize="large" />
+          <IconButton type="submit" aria-label="add list name" data-testid="add-btn">
+            <AddIcon fontSize="large"/>
           </IconButton>
         </form>
       </CardContent>
